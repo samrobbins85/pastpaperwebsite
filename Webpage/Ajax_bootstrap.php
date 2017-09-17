@@ -16,13 +16,21 @@ th {text-align: left;}
 </style>
 </head>
 <body>
-
+<table class="table">
+  <thead>
+    <tr class="bg-success">
+      <th>Year</th>
+      <th>Score</th>
+      <th>Total</th>
+    </tr>
+  </thead>
+  <tbody>
 
 
 <?php
 
 $q = $_GET['q'];
-echo "$q";
+// echo "$q";
 
   //Server Details
   include("database_info.php");
@@ -42,20 +50,22 @@ echo "$q";
       while($row = $result->fetch_assoc()) {
         $Year=$row['Year'];
         array_push($array, $Year);
-        $sql2="SELECT SUM(My_Mark) AS value_sum FROM Papers WHERE Year=$Year";
+        $sql2="SELECT SUM(My_Mark) AS value_sum, SUM(Out_Of) AS out_of_sum FROM Papers WHERE Year=$Year";
         $result2 = $conn->query($sql2);
         if ($result->num_rows > 0) {
     // output data of each row
     while($row = $result2->fetch_assoc()) {
-        echo "sum in $Year is : " . $row["value_sum"];
-        echo "<br>";
+        echo "<tr class='bg-primary'>";
+        echo "<th scope='row'>$Year</th>";
+        echo "<td>$row[value_sum]</td>";
+        echo "<td>$row[out_of_sum]</td>";
+        echo "</tr>";
     }
     } else {
     echo "0 results";
     }
-        echo $name;
+        // echo $name;
         //echo $Year;
-
       }
 }
 
@@ -63,5 +73,9 @@ echo "$q";
 
 
 ?>
+
+
+</tbody>
+</table>
 </body>
 </html>
